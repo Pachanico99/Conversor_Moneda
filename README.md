@@ -1,7 +1,7 @@
 El siguiente proyecto interactúa con la API de conversión de divisas (en este caso, ExchangeRate_Api).
 Permite a los usuarios seleccionar ciertos datos y realizar consultas de conversión de divisas. Estas conversiones se muestran en pantalla y se almacenan en formato json en archivos para su uso posterior.
 
-Fue desarrollado con java en el IDE de Apache NetBeans IDE 19.
+Fue desarrollado con java en el IDE de Apache NetBeans IDE 19 y usando la dependencia Gson.jar.
 
 Ejecucion del proyecto, menu de inicio para realizar las conversiones:
 
