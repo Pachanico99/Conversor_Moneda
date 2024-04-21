@@ -55,42 +55,37 @@ public interface GuardarEnArchivo {
         }
     }
     
-    
     default void guardarConversion(Conversion conversion, String rutaArchivo) {
-        String json = new GsonBuilder().setPrettyPrinting().create().toJson(conversion);
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-        // Nombre del archivo temporal
-        String rutaArchivoTemporal = rutaArchivo + ".tmp";
+        // Convertir la conversión a JSON
+        JsonObject jsonObject = gson.toJsonTree(conversion).getAsJsonObject();
 
-        // Escribir el nuevo objeto en el archivo temporal
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(rutaArchivoTemporal))) {
-            writer.write(json);
-            writer.newLine();
-
-            // Copiar el contenido del archivo original al archivo temporal
-            try (BufferedReader reader = new BufferedReader(new FileReader(rutaArchivo))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    writer.write(line);
-                    writer.newLine();
-                }
-            }
+        // Leer el contenido actual del archivo (si existe)
+        JsonArray jsonArray = new JsonArray();
+        JsonArray anterior = leerJsonArray(rutaArchivo);
+        jsonArray.add(jsonObject);
+        if(!(anterior == null)){
+            jsonArray.addAll( anterior);
+        }
+        // Escribir la lista de JSONObjects actualizada en el archivo
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(rutaArchivo))) {
+            writer.write(gson.toJson(jsonArray));
+            System.out.println("Resultado guardado correctamente en el archivo.");
         } catch (IOException e) {
             System.err.println("Error al guardar el resultado en el archivo: " + e.getMessage());
-            return;
         }
+    }
 
-        // Eliminar el archivo original y renombrar el archivo temporal
-        File archivoOriginal = new File(rutaArchivo);
-        File archivoTemporal = new File(rutaArchivoTemporal);
-        if (archivoOriginal.delete()) {
-            if (!archivoTemporal.renameTo(archivoOriginal)) {
-                System.err.println("No se pudo renombrar el archivo temporal.");
-            } else {
-                System.out.println("Resultado guardado.");
-            }
-        } else {
-            System.err.println("No se pudo eliminar el archivo original.");
+    // Método para leer el contenido actual del archivo y retornarlo como un JsonArray
+    private JsonArray leerJsonArray(String rutaArchivo) {
+        JsonArray jsonArray = new JsonArray();
+        try (BufferedReader reader = new BufferedReader(new FileReader(rutaArchivo))) {
+            Gson gson = new Gson();
+            jsonArray = gson.fromJson(reader, JsonArray.class);
+        } catch (IOException e) {
+            System.err.println("Error al leer el archivo: " + e.getMessage());
         }
+        return jsonArray;
     }
 }

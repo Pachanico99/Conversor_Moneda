@@ -8,6 +8,8 @@ import COM.ALURA.Challenges.ConvesorMoneda.Modelos.Divisa;
 import com.google.gson.Gson;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -38,11 +40,14 @@ public class MenuConversion extends javax.swing.JFrame {
     }
     
     private static String generarMensajeConversion(Conversion conversor, String nombreDivisaBase, String nombreDivisaObjectivo){
-        return String.format("%,.2f",conversor.getImporte()) + " " + nombreDivisaBase + " = \n"
+        DateFormat formatoDeFecha = new SimpleDateFormat("dd|MM|yyyy - HH:mm:ss");
+        return "Fecha de conversion: " + formatoDeFecha.format(conversor.getFechaDeConsulta()) + " \n"
+                    + String.format("%,.2f",conversor.getImporte()) + " " + nombreDivisaBase + " = \n"
                     + String.format("%,.2f",conversor.importeConvertido()) + " " + nombreDivisaObjectivo + "\n"
-                    + "Razon de cambio: \n"
+                    + "[Ultima fecha de actualizacion de la api: " + formatoDeFecha.format(conversor.getFechaDeUltimaActualización()) +"]\n"
+                    + "Razon de cambio: \n" 
                     + "1 " + conversor.getCodigoDivisaBase() + " = " + conversor.getTasaCambio() + " " + conversor.getCodigoDivisaObjectivo() + "\n"
-                    + "1 " + conversor.getCodigoDivisaObjectivo() + " = " + (1/conversor.getTasaCambio()) + " " + conversor.getCodigoDivisaBase() + "\n";
+                    + "1 " + conversor.getCodigoDivisaObjectivo() + " = " + (1 / conversor.getTasaCambio()) + " " + conversor.getCodigoDivisaBase() + "\n";
     }
 
     /*
@@ -79,7 +84,7 @@ public class MenuConversion extends javax.swing.JFrame {
         listaMonedaObjectivo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         salidaConversion.setColumns(20);
-        salidaConversion.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        salidaConversion.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         salidaConversion.setRows(5);
         jScrollPane1.setViewportView(salidaConversion);
 

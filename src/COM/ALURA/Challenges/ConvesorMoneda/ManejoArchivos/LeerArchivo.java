@@ -3,7 +3,8 @@ package COM.ALURA.Challenges.ConvesorMoneda.ManejoArchivos;
 import COM.ALURA.Challenges.ConvesorMoneda.Modelos.Conversion;
 import COM.ALURA.Challenges.ConvesorMoneda.Modelos.Divisa;
 import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
+import com.google.gson.JsonArray;
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -28,26 +29,28 @@ public interface LeerArchivo {
             return null;
         }
     }
-    
-    default ArrayList<Conversion> cargarHistorialConveriones(String rutaArchivo){
+    // Método para cargar el historial de conversiones desde un archivo JSON
+    default ArrayList<Conversion> cargarHistorialConveriones(String rutaArchivo) {
         Gson gson = new Gson();
-        var conversiones = new ArrayList<Conversion>();
+        ArrayList<Conversion> conversiones = new ArrayList<>();
         
-        try (JsonReader reader = new JsonReader(new FileReader(rutaArchivo))) {
-            // Configurar el lector para que ignore los nombres de las raíces y lea cada objeto JSON individual
-            reader.setLenient(true);
-
-            // Leer el archivo JSON mientras haya objetos para leer
-            while (reader.hasNext()) {
-                // Convertir el objeto JSON en un objeto Conversion
-                Conversion conversion = gson.fromJson(reader, Conversion.class);
-                conversiones.add(conversion);
+        try (BufferedReader reader = new BufferedReader(new FileReader(rutaArchivo))) {
+            // Leer el contenido del archivo como un JsonArray
+            JsonArray jsonArray = gson.fromJson(reader, JsonArray.class);
+            
+            if(!(jsonArray == null)){
+                // Iterar sobre el JsonArray y convertir cada objeto JSON en un objeto Conversion
+                for (int i = 0; i < jsonArray.size(); i++) {
+                    Conversion conversion = gson.fromJson(jsonArray.get(i), Conversion.class);
+                    conversiones.add(conversion);
+                }
+            }else{
+                return null;
             }
-            reader.close();
-            return conversiones;
         } catch (IOException e) {
-            System.out.println("Ocurrio un error, en donde no se encontro el archivo Historial: " + e.getMessage());
-            return null;
+            System.err.println("Error al leer el archivo: " + e.getMessage());
         }
+        
+        return conversiones;
     }
 }
