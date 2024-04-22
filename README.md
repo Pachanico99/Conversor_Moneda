@@ -29,11 +29,11 @@ Contiene otra interfaz grafica para manejar las conversiones realizadas anterior
 
 La ventana de historial muestra la conversion con informacion reducida, permite extraer las divisas y el importe utilizado en estas, solo tienes que seleccionar que conversion quieres y apretar el boton ingresar.
 
-![image](https://github.com/Pachanico99/Conversor_Moneda/assets/156742223/ad66a525-dbd5-4d7a-8917-1f5cc1b49643)
+![image](https://github.com/Pachanico99/Conversor_Moneda/assets/156742223/bb85720f-a105-46d6-a9f1-af91f9b370fb)
 
-Si seleccionamos una conversion y apretamos el boton ingresar, se abrira la venta del menu de conversiones y se cargaran los datos que se utilizaron en dicha conversion.
+Si seleccionamos una conversion y clickeamos el boton ingresar, se abrira la venta del menu de conversiones y se cargaran los datos que se utilizaron en dicha conversion.
 
-![image](https://github.com/Pachanico99/Conversor_Moneda/assets/156742223/91578c18-2d2a-4c50-8716-afd39e1b4d9e)
+![image](https://github.com/Pachanico99/Conversor_Moneda/assets/156742223/f36f0a08-4b9e-43fb-bae3-a980d3a0a3df)
 
 Almacenamiento de conversion y divisas admitidas. Estas se guardan en formato json y se utilizar la dependencia Gson para leerlos y guardarlos:
 Ej:
